@@ -30,6 +30,7 @@ Route::get('/barang', function () {
 })->name('barang');
 
 // Jenis Barang
+Route::resource('jenis-barang', JenisBarangController::class);
 Route::get('/jenis-barang', function () {
     return Inertia::render('JenisBarang/Index');
 })->name('jenis-barang');

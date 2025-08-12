@@ -7,13 +7,18 @@ defineOptions({
   layout: AppLayout
 })
 
+// Props dari Laravel Controller
 const props = defineProps({
   jenisBarang: Array
 })
 
+// Form tambah
 const form = ref({ nama: '' })
+
+// Form edit
 const editForm = ref({ id: null, nama: '' })
 
+// Tambah data
 const submit = () => {
   router.post(route('jenis-barang.store'), form.value, {
     onSuccess: () => {
@@ -22,11 +27,13 @@ const submit = () => {
   })
 }
 
+// Mulai edit
 const startEdit = (jb) => {
   editForm.value.id = jb.id
   editForm.value.nama = jb.nama
 }
 
+// Update data
 const update = () => {
   router.put(route('jenis-barang.update', editForm.value.id), { nama: editForm.value.nama }, {
     onSuccess: () => {
@@ -36,6 +43,7 @@ const update = () => {
   })
 }
 
+// Hapus data
 const destroy = (id) => {
   if (confirm('Yakin ingin menghapus?')) {
     router.delete(route('jenis-barang.destroy', id))
@@ -44,38 +52,40 @@ const destroy = (id) => {
 </script>
 
 <template>
-  <div>
-    <h1 class="text-xl font-bold mb-4">Jenis Barang</h1>
+  <div class="p-6">
+    <h1 class="text-xl font-bold mb-4">Manajemen Jenis Barang</h1>
 
     <!-- Form Tambah -->
-    <form @submit.prevent="submit" v-if="!editForm.id" class="mb-6 flex gap-2">
-      <input v-model="form.nama" type="text" placeholder="Nama Jenis Barang" class="border rounded px-2 py-1 flex-1" />
-      <button type="submit" class="bg-blue-500 text-white px-4 py-1 rounded">Tambah</button>
-    </form>
+    <div class="mb-6">
+      <input v-model="form.nama" type="text" placeholder="Nama jenis barang"
+             class="border rounded px-3 py-2 mr-2" />
+      <button @click="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Tambah</button>
+    </div>
 
     <!-- Form Edit -->
-    <form @submit.prevent="update" v-else class="mb-6 flex gap-2">
-      <input v-model="editForm.nama" type="text" placeholder="Nama Jenis Barang" class="border rounded px-2 py-1 flex-1" />
-      <button type="submit" class="bg-green-500 text-white px-4 py-1 rounded">Update</button>
-      <button type="button" @click="editForm.id = null" class="bg-gray-500 text-white px-4 py-1 rounded">Batal</button>
-    </form>
+    <div v-if="editForm.id" class="mb-6">
+      <input v-model="editForm.nama" type="text" placeholder="Edit jenis barang"
+             class="border rounded px-3 py-2 mr-2" />
+      <button @click="update" class="bg-green-500 text-white px-4 py-2 rounded">Update</button>
+      <button @click="editForm.id = null" class="bg-gray-500 text-white px-4 py-2 rounded">Batal</button>
+    </div>
 
-    <!-- Tabel -->
+    <!-- Tabel Data -->
     <table class="w-full border">
       <thead>
         <tr class="bg-gray-200">
-          <th class="p-2 border">ID</th>
-          <th class="p-2 border">Nama</th>
-          <th class="p-2 border">Aksi</th>
+          <th class="border px-4 py-2">ID</th>
+          <th class="border px-4 py-2">Nama</th>
+          <th class="border px-4 py-2">Aksi</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="jb in jenisBarang" :key="jb.id">
-          <td class="p-2 border">{{ jb.id }}</td>
-          <td class="p-2 border">{{ jb.nama }}</td>
-          <td class="p-2 border text-center space-x-2">
-            <button @click="startEdit(jb)" class="bg-yellow-500 text-white px-2 py-1 rounded">Edit</button>
-            <button @click="destroy(jb.id)" class="bg-red-500 text-white px-2 py-1 rounded">Hapus</button>
+          <td class="border px-4 py-2">{{ jb.id }}</td>
+          <td class="border px-4 py-2">{{ jb.nama }}</td>
+          <td class="border px-4 py-2 space-x-2">
+            <button @click="startEdit(jb)" class="bg-yellow-500 text-white px-3 py-1 rounded">Edit</button>
+            <button @click="destroy(jb.id)" class="bg-red-500 text-white px-3 py-1 rounded">Hapus</button>
           </td>
         </tr>
       </tbody>
